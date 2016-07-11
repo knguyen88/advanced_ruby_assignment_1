@@ -2,11 +2,11 @@ require 'minitest/autorun'
 
 module Printable
   def self.class_method_x
-    # TODO: implement this to make tests pass
+    'class_method_x'
   end
 
   def instance_method_y
-    # TODO: implement this to make tests pass
+    'instance_method_y'
   end
 end
 
@@ -25,31 +25,30 @@ class TestPrintableModule < Minitest::Test
 end
 
 class ExtendDocument
-  # TODO: update this class to make tests pass
+  extend Printable
 end
 
 class TestExtendDocument < Minitest::Test
   def test_calling_instance_method_y
-    skip
     assert_equal 'instance_method_y', ExtendDocument.instance_method_y
   end
 end
 
 class IncludeDocument
-  # TODO: update this class to make tests pass
+  include Printable
 end
 
 class TestIncludeDocument < Minitest::Test
   def test_calling_instance_method_y
-    skip
     assert_equal 'instance_method_y', IncludeDocument.new.instance_method_y
   end
 end
 
 module PrintableHooked
-  # TODO: implement an `included(klass)` hook that prints "included in ..."
-  # AND also extend klass with instance methods in ClassMethods module
-  # def ...
+  def self.included(klass)
+    puts 'included in ' + klass.to_s
+    klass.extend(ClassMethods)
+  end
 
 
   module ClassMethods
@@ -57,8 +56,9 @@ module PrintableHooked
       p 'class_method_x'
     end
 
-    # TODO: implement an `extended` hook that prints "extended in"
-    # def ...
+    def self.extended(klass)
+      puts 'extended in ' + klass.to_s
+    end
   end
 
   def instance_method_y
